@@ -1,0 +1,6 @@
+Django>=4.2,<5
+gunicorn
+mysqlclient
+mysql-connector-python
+python-dotenv
+pymysql
