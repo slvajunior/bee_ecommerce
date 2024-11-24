@@ -1,6 +1,7 @@
-Django>=4.2,<5
-gunicorn
-mysqlclient
-mysql-connector-python
-python-dotenv
+Django
+mysqlclient  # Driver para MySQL
+python-dotenv  # Para carregar o .env
 pymysql
+Django==4.2.16
+mysqlclient==2.2.6
+
