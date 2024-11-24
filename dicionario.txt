@@ -1,7 +1,0 @@
-Category (Categoria)
-Order (Pedido)
-Cart (Carrinho)
-Customer (Cliente)
-Price (preço)
-Create_at (criar em)
-total_amount(valor total)
