@@ -1,0 +1,15 @@
+<div>
+    <h1>{{ product.name }}</h1>
+
+    {% if product.image %}
+    <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 300px;">
+    {% else %}
+    <p><em>Sem imagem disponível</em></p>
+    {% endif %}
+
+    <p><strong>Descrição:</strong> {{ product.description }}</p>
+    <p><strong>Preço:</strong> ${{ product.price }}</p>
+    <p><strong>Estoque:</strong> {{ product.stock }}</p>
+    <p><strong>Categoria:</strong> {{ product.category.name }}</p>
+    <a href="{% url 'product_list' %}">Voltar à listagem</a>
+</div>

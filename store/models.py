@@ -1,17 +1,33 @@
 from django.db import models
+from django.core.files.images import ImageFile
+from PIL import Image
+import io
 
 
 # Definição do Modelo de Produto
 class Product(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=225)
+    image = models.ImageField(upload_to="products/", blank=True, null=True)
     description = models.TextField(max_length=500)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
-    image = models.ImageField(upload_to="products/images/", blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    featured = models.BooleanField(default=False)
+
     category = models.ForeignKey(
         "Category", on_delete=models.CASCADE, null=True, blank=True
     )
+
+    def save(self, *args, **kwargs):
+        if self.image:
+            img = Image.open(self.image)
+            img = img.resize((854, 480))
+            img_io = io.BytesIO()
+            img.save(img_io, format="JPEG")
+            img_file = ImageFile(img_io, name=self.image.name)
+            self.image = img_file
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name

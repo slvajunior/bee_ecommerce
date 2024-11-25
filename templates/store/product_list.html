@@ -1,20 +1,86 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Product List</title>
 </head>
+
 <body>
     <h1>Products</h1>
+
     <ul>
         {% for product in products %}
-            <li>{{ product.name }} - ${{ product.price }} ({{ product.stock }} in stock)</li>
+        <li>
+            <h2>
+                <!-- Torna o nome do produto um link clicável -->
+                <a href="{% url 'product_detail' product.id %}">
+                    {{ product.name }}
+                </a>
+            </h2>
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 150px; height: auto;">
+            {% endif %}
+            <p><strong>Preço:</strong> R$ {{ product.price }}</p>
+            <p><strong>Estoque:</strong> {{ product.stock }} unidades</p>
+            <p><strong>Descrição:</strong> {{ product.description }}</p>
+            <p><strong>Categoria:</strong> {{ product.category.name }}</p>
+            {% if product.featured %}
+            <p style="color: green;">Produto em destaque!</p>
+            {% endif %}
+            <p><em>Criado em: {{ product.created_at|date:"d/m/Y H:i" }}</em></p>
+            <p><em>Última atualização: {{ product.updated_at|date:"d/m/Y H:i" }}</em></p>
+        </li>
         {% endfor %}
     </ul>
-    <form method="get">
-        <input type="text" name="q" placeholder="Buscar produtos" value="{{ query }}">
-        <button type="submit">Buscar</button>
+
+    <form method="get" action="">
+        <input type="text" name="q" value="{{ query }}" placeholder="Buscar produtos...">
+        
+        <!-- Filtro por categoria -->
+        <select name="category">
+            <option value="">Todas as Categorias</option>
+            {% for category in categories %}
+            <option value="{{ category.id }}" {% if category.id|stringformat:"s" == selected_category %}selected{% endif %}>
+                {{ category.name }}
+            </option>
+            {% endfor %}
+        </select>
+        
+        <!-- Ordenação -->
+        <select name="order">
+            <option value="name" {% if order == 'name' %}selected{% endif %}>Nome (A-Z)</option>
+            <option value="price" {% if order == 'price' %}selected{% endif %}>Preço (menor para maior)</option>
+            <option value="-price" {% if order == '-price' %}selected{% endif %}>Preço (maior para menor)</option>
+            <option value="stock" {% if order == 'stock' %}selected{% endif %}>Estoque</option>
+        </select>
+    
+        <button type="submit">Filtrar</button>
     </form>
     
+    <div>
+        <h2>Produtos</h2>
+
+        <ul>
+            {% for product in products %}
+            <li>
+                <strong>
+                    <!-- Torna o nome do produto um link clicável -->
+                    <a href="{% url 'product_detail' product.id %}">
+                        {{ product.name }}
+                    </a>
+                </strong> - ${{ product.price }} ({{ product.stock }} in stock)
+                <br>
+                Categoria: {{ product.category.name|default:"Sem categoria" }}
+            </li>
+            {% endfor %}
+        </ul>
+
+    </div>
+
+    {% if user.is_authenticated and user.is_staff %}
     <a href="{% url 'product_create' %}">Create New Product</a>
+    {% endif %}
+
 </body>
+
 </html>
