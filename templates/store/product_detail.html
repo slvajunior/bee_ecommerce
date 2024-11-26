@@ -1,15 +1,33 @@
+{% load currency %}
 <div>
     <h1>{{ product.name }}</h1>
 
+    <!-- Imagem principal -->
     {% if product.image %}
     <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 300px;">
     {% else %}
     <p><em>Sem imagem disponível</em></p>
     {% endif %}
+    
+    <!-- Link para adicionar ao carrinho -->
+    <a href="{% url 'add_to_cart' product.id %}">Adicionar ao Carrinho</a>
 
     <p><strong>Descrição:</strong> {{ product.description }}</p>
-    <p><strong>Preço:</strong> ${{ product.price }}</p>
+    <p><strong>Preço:</strong> {{ product.price|currency }}</p>
     <p><strong>Estoque:</strong> {{ product.stock }}</p>
     <p><strong>Categoria:</strong> {{ product.category.name }}</p>
+
+    <!-- Imagens adicionais -->
+    {% if product.additional_images.all %}
+    <h3>Imagens Adicionais:</h3>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        {% for image in product.additional_images.all %}
+        <img src="{{ image.image.url }}" alt="Imagem adicional de {{ product.name }}" 
+             style="max-width: 150px; height: auto; border: 1px solid #ccc; padding: 5px;">
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Link para voltar à lista -->
     <a href="{% url 'product_list' %}">Voltar à listagem</a>
 </div>

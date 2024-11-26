@@ -1,0 +1,57 @@
+{% load static %}
+{% load currency %}
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Carrinho de Compras</title>
+</head>
+
+<body>
+    <h1>Seu Carrinho</h1>
+
+    <!-- Voltar para a listagem de produtos -->
+    <a href="{% url 'product_list' %}">Voltar à Lista de Produtos</a>
+
+    <!-- Verificação se há itens no carrinho -->
+    {% if cart %}
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th>Preço</th>
+                    <th>Quantidade</th>
+                    <th>Subtotal</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.price|currency }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.subtotal|currency }}</td>
+                    <td>
+                        <a href="{% url 'remove_from_cart' item.product_id %}">Remover</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Total do carrinho -->
+        <h3>Total: {{ total|currency }}</h3>
+
+        <!-- Link para finalizar compra -->
+        <a href="{% url 'checkout' %}">Finalizar Compra</a>
+
+    {% else %}
+        <p>Seu carrinho está vazio.</p>
+        <a href="{% url 'product_list' %}">Voltar às Compras</a>
+    {% endif %}
+</body>
+
+</html>

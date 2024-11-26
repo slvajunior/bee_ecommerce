@@ -1,0 +1,127 @@
+/* :root é usado para declarar variáveis globais */
+:root {
+    /* Paleta de cores */
+    --color-primary: #4CAF50; /* Exemplo de verde elegante */
+    --color-secondary: #FFC107; /* Amarelo vibrante */
+    --color-accent: #F44336; /* Vermelho para alertas */
+    --color-background: #F5F5F5; /* Cor de fundo geral */
+    --color-text: #333; /* Texto principal */
+    --color-text-light: #777; /* Texto secundário */
+    --color-header: #1E88E5; /* Azul do header ou navegação */
+    --color-footer: #263238; /* Cinza escuro do footer */
+
+    /* Tipografia */
+    --font-family-sans: 'Roboto', sans-serif; /* Fonte principal */
+    --font-family-serif: 'Merriweather', serif; /* Fonte opcional */
+    --font-size-base: 16px; /* Tamanho base */
+    --font-size-large: 1.25rem; /* Para títulos */
+    --font-size-small: 0.875rem; /* Para detalhes menores */
+
+    /* Espaçamentos */
+    --spacing-small: 8px;
+    --spacing-medium: 16px;
+    --spacing-large: 24px;
+
+    /* Borda */
+    --border-radius: 8px;
+    --border-color: #ddd;
+}
+
+/* Cor de fundo principal da página */
+body {
+    background-color: #ffffff;  /* Fundo branco */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Título e subtítulo */
+h1, h2 {
+    text-align: center;
+    color: #333333;  /* Cor escura para contraste */
+}
+
+/* Container geral para os produtos */
+.container {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Lista de produtos */
+.product-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);  /* 3 produtos por linha */
+    gap: 20px;  /* Espaçamento entre os produtos */
+    justify-content: center;
+}
+
+/* Estilo dos quadrados de cada produto */
+.product-item {
+    background-color: #fafafa; /* Fundo do quadrado dos produtos */
+    border-radius: 8px;  /* Bordas arredondadas */
+    padding: 15px;
+    transition: transform 0.3s ease-in-out;  /* Efeito ao passar o mouse */
+}
+
+/* Estilo base */
+.elemento {
+    border: 0.5px solid transparent; /* Inicialmente, a borda é invisível */
+    transition: border-color 0.3s ease; /* Suaviza a transição da borda */
+}
+
+/* Estilo quando o mouse passa por cima */
+.elemento:hover {
+    border-color: yellow; /* Muda a cor da borda quando o mouse passa por cima */
+}
+
+/* Efeito de hover no quadrado do produto */
+.product-item:hover {
+    transform: scale(1.05);  /* Amplia o quadrado ao passar o mouse */
+}
+
+/* Imagem do produto */
+.product-item img {
+    max-width: 100%;  /* Deixa a imagem responsiva dentro do quadrado */
+    height: auto;
+    border-radius: 0.5px;  /* Bordas arredondadas nas imagens */
+    margin-bottom: 0.5px;  /* Espaço abaixo da imagem */
+}
+
+/* Preço */
+.product-item p {
+    color: #333333;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* Link do botão 'Adicionar ao Carrinho' */
+.product-item a {
+    display: block;
+    text-align: center;
+    background-color: #fffffe;  /* Amarelo */
+    color: #333333;
+    padding: 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* Efeito ao passar o mouse sobre o botão */
+.product-item a:hover {
+    background-color: #e0e000;  /* Amarelo mais escuro */
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .product-list {
+        grid-template-columns: repeat(2, 1fr);  /* 2 produtos por linha em telas menores */
+    }
+}
+
+@media (max-width: 480px) {
+    .product-list {
+        grid-template-columns: 1fr;  /* 1 produto por linha em telas bem pequenas */
+    }
+}

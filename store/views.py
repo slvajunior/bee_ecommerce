@@ -99,3 +99,66 @@ def category_create(request):
         form = CategoryForm()
 
     return render(request, "store/category_form.html", {"form": form})
+
+
+# View add no carrinho
+def add_to_cart(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    cart = request.session.get("cart", [])  # Corrigido: "cart" ao invés de "card"
+
+    for item in cart:
+        if item["product_id"] == product.id:
+            item["quantity"] += 1
+            item["subtotal"] = float(item["quantity"] * product.price)
+            break
+    else:
+        cart.append(
+            {
+                "product_id": product.id,
+                "name": product.name,
+                "price": float(product.price),
+                "quantity": 1,
+                "subtotal": float(product.price),
+            }
+        )
+
+    request.session["cart"] = cart
+    return redirect("cart_view")  # Alterado para redirecionar ao carrinho
+
+
+# View do carrinho
+def cart_view(request):
+    cart = request.session.get("cart", [])
+    total = sum(item["quantity"] * item["price"] for item in cart)
+    return render(request, "store/cart_view.html", {"cart": cart, "total": total})
+
+
+# View de remover do carrinho
+def remove_from_cart(request, product_id):
+    cart = request.session.get("cart", [])
+
+    cart = [item for item in cart if item["product_id"] != product_id]
+
+    request.session["cart"] = cart
+    return redirect("cart_view")
+
+
+# View calcula o total do carrinho
+def checkout(request):
+    cart = request.session.get("cart", [])
+
+    if not cart:
+        messages.error(request, "O carrinho está vazio.")
+        return redirect("product_list")
+
+    total = sum(item["subtotal"] for item in cart)
+
+    request.session["cart"] = []
+    messages.success(request, "Compra realizada com sucesso.")
+
+    return render(request, "store/checkout.html", {"total": total})
+
+
+def home(request):
+    products = Product.objects.all()
+    return render(request, "store/home.html", {"products": products})

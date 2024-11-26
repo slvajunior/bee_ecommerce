@@ -1,42 +1,37 @@
+{% extends "store/base.html" %}
+
+{% load static %}
+{% load currency %}
+
+{% block content %}
+
 <!DOCTYPE html>
 <html>
 
 <head>
-    <title>Product List</title>
+    <title>Lista de Produtos</title>
+</head>
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/product_list.css' %}">
 </head>
 
+
 <body>
-    <h1>Products</h1>
+    <h1>Lista de Produtos</h1>
 
-    <ul>
-        {% for product in products %}
-        <li>
-            <h2>
-                <!-- Torna o nome do produto um link clicável -->
-                <a href="{% url 'product_detail' product.id %}">
-                    {{ product.name }}
-                </a>
-            </h2>
-            {% if product.image %}
-            <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 150px; height: auto;">
-            {% endif %}
-            <p><strong>Preço:</strong> R$ {{ product.price }}</p>
-            <p><strong>Estoque:</strong> {{ product.stock }} unidades</p>
-            <p><strong>Descrição:</strong> {{ product.description }}</p>
-            <p><strong>Categoria:</strong> {{ product.category.name }}</p>
-            {% if product.featured %}
-            <p style="color: green;">Produto em destaque!</p>
-            {% endif %}
-            <p><em>Criado em: {{ product.created_at|date:"d/m/Y H:i" }}</em></p>
-            <p><em>Última atualização: {{ product.updated_at|date:"d/m/Y H:i" }}</em></p>
-        </li>
-        {% endfor %}
-    </ul>
+    <!-- Carrinho de Compras -->
+    <div>
+        <span>Carrinho ({{ cart_count }})</span>
 
+        <!-- Link para visualizar o carrinho -->
+        <a href="{% url 'cart_view' %}">Ver Carrinho</a>
+
+    </div>
+
+    <!-- Filtro e ordenação -->
     <form method="get" action="">
         <input type="text" name="q" value="{{ query }}" placeholder="Buscar produtos...">
         
-        <!-- Filtro por categoria -->
         <select name="category">
             <option value="">Todas as Categorias</option>
             {% for category in categories %}
@@ -46,7 +41,6 @@
             {% endfor %}
         </select>
         
-        <!-- Ordenação -->
         <select name="order">
             <option value="name" {% if order == 'name' %}selected{% endif %}>Nome (A-Z)</option>
             <option value="price" {% if order == 'price' %}selected{% endif %}>Preço (menor para maior)</option>
@@ -56,31 +50,53 @@
     
         <button type="submit">Filtrar</button>
     </form>
-    
-    <div>
-        <h2>Produtos</h2>
 
-        <ul>
-            {% for product in products %}
-            <li>
-                <strong>
-                    <!-- Torna o nome do produto um link clicável -->
-                    <a href="{% url 'product_detail' product.id %}">
-                        {{ product.name }}
-                    </a>
-                </strong> - ${{ product.price }} ({{ product.stock }} in stock)
-                <br>
-                Categoria: {{ product.category.name|default:"Sem categoria" }}
-            </li>
-            {% endfor %}
-        </ul>
+    <!-- Lista de produtos -->
+    <ul>
+        {% for product in products %}
+        <li>
+            <h2>
+                <a href="{% url 'product_detail' product.id %}">
+                    {{ product.name }}
+                </a>
+            </h2>
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 150px; height: auto;">
+            {% endif %}
+            <p><strong>Preço:</strong> {{ product.price|currency }}</p>
+            <p><strong>Estoque:</strong> {{ product.stock }} unidades</p>
+            <p><strong>Descrição:</strong> {{ product.description }}</p>
+            <p><strong>Categoria:</strong> {{ product.category.name }}</p>
+            {% if product.featured %}
+            <p style="color: green;">Produto em destaque!</p>
+            {% endif %}
+            <p><em>Criado em: {{ product.created_at|date:"d/m/Y H:i" }}</em></p>
+            <p><em>Última atualização: {{ product.updated_at|date:"d/m/Y H:i" }}</em></p>
 
-    </div>
+            <!-- Imagens adicionais -->
+            {% if product.additional_images.all %}
+            <h3>Imagens Adicionais:</h3>
+            <ul>
+                {% for image in product.additional_images.all %}
+                <li>
+                    <img src="{{ image.image.url }}" alt="Imagem adicional de {{ product.name }}" 
+                         style="max-width: 100px; height: auto;">
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            <!-- Link para adicionar ao carrinho -->
+            <a href="{% url 'add_to_cart' product.id %}">Adicionar ao Carrinho</a>
+        </li>
+        {% endfor %}
+    </ul>
 
     {% if user.is_authenticated and user.is_staff %}
-    <a href="{% url 'product_create' %}">Create New Product</a>
+    <a href="{% url 'product_create' %}">Criar Novo Produto</a>
     {% endif %}
 
 </body>
 
 </html>
+{% endblock %}

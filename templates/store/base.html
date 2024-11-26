@@ -1,0 +1,45 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bee Ecommerce</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <!-- Logo e título -->
+            <a href="{% url 'home' %}" class="logo">
+                <h1>Bee Ecommerce</h1>
+            </a>
+
+            <!-- Menu de navegação -->
+            <nav>
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'product_list' %}">Produtos</a>
+                <a href="{% url 'cart_view' %}">Carrinho</a>
+            </nav>
+
+            <!-- Barra de busca -->
+            <div class="search-container">
+                <form action="{% url 'product_list' %}" method="get">
+                    <input type="text" name="q" placeholder="Buscar produtos..." value="{{ query }}">
+                    <button type="submit">Buscar</button>
+                </form>
+            </div>
+        </div>
+    </header>
+
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Bee Ecommerce</p>
+    </footer>
+</body>
+</html>

@@ -19,6 +19,13 @@ class Product(models.Model):
         "Category", on_delete=models.CASCADE, null=True, blank=True
     )
 
+
+class ProductImage(models.Model):
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, related_name="additional_images"
+    )
+    image = models.ImageField(upload_to="products/extra_images/")
+
     def save(self, *args, **kwargs):
         if self.image:
             img = Image.open(self.image)
@@ -30,7 +37,7 @@ class Product(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.name
+        return f"Extra image for {self.product.name}"
 
 
 class Category(models.Model):

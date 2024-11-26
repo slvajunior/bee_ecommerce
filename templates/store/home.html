@@ -1,0 +1,29 @@
+{% extends 'store/base.html' %}
+{% load static %}
+{% load currency %}
+
+{% block content %}
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+</head>
+
+<div class="container">
+    <div class="product-list">
+        {% for product in products %}
+        <div class="product-item">
+            <h3>{{ product.name }}</h3>
+            {% if product.image %}
+                <!-- Ao clicar na imagem, o usuário será redirecionado para a página de detalhes do produto -->
+                <a href="{% url 'product_detail' product.id %}">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                </a>
+            {% else %}
+                <p><em>Sem imagem disponível</em></p>
+            {% endif %}
+            <p><strong>Preço:</strong> {{ product.price|currency }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
